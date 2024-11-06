@@ -15,3 +15,5 @@ https://pris.ly/d/getting-started
 
 *> config database URL
 *> prisma db pull
+
+

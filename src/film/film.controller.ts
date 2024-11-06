@@ -2,7 +2,8 @@ import { Controller, Delete, Get, Post, Put, Req, Res } from '@nestjs/common';
 
 @Controller('film')
 export class FilmController {
-  constructor() {}
+  constructor() {
+  }
 
   @Post()
   create(@Req() req: Request): string {
