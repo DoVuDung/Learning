@@ -1,4 +1,4 @@
-import { FilmService } from './film.service';
+import { FilmService } from "./film.service";
 export declare class FilmController {
     private readonly filmService;
     constructor(filmService: FilmService);
@@ -12,7 +12,7 @@ export declare class FilmController {
         rental_rate: import("@prisma/client/runtime/library").Decimal;
         length: number | null;
         replacement_cost: import("@prisma/client/runtime/library").Decimal;
-        rating: import("@prisma/client").$Enums.MPAA_RATING | null;
+        rating: import(".prisma/client").$Enums.MPAA_RATING | null;
         last_update: Date;
         special_features: string[];
     }[]>;

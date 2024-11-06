@@ -29,8 +29,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], FilmController.prototype, "getAllFilms", null);
 exports.FilmController = FilmController = __decorate([
-    (0, swagger_1.ApiTags)('FILM'),
-    (0, common_1.Controller)('films'),
+    (0, swagger_1.ApiTags)("FILM"),
+    (0, common_1.Controller)("films"),
     __metadata("design:paramtypes", [film_service_1.FilmService])
 ], FilmController);
 //# sourceMappingURL=film.controller.js.map
