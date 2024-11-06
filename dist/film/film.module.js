@@ -14,7 +14,7 @@ let FilmModule = class FilmModule {
 exports.FilmModule = FilmModule;
 exports.FilmModule = FilmModule = __decorate([
     (0, common_1.Module)({
-        controllers: [film_controller_1.FilmController]
+        controllers: [film_controller_1.FilmController],
     })
 ], FilmModule);
 //# sourceMappingURL=film.module.js.map

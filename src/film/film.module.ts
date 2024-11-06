@@ -2,6 +2,6 @@ import { Module } from '@nestjs/common';
 import { FilmController } from './film.controller';
 
 @Module({
-  controllers: [FilmController]
+  controllers: [FilmController],
 })
 export class FilmModule {}
