@@ -1,32 +1,14 @@
-import { Controller, Delete, Get, Post, Put, Req, Res } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
+import { FilmService } from './film.service';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('film')
+@ApiTags('FILM')
+@Controller('films')
 export class FilmController {
-  constructor() {
-  }
-
-  @Post()
-  create(@Req() req: Request): string {
-    return 'create film';
-  }
+  constructor(private readonly filmService: FilmService) {}
 
   @Get()
-  findAll(@Req() req: Request, @Res() res: Response): string {
-    return 'get films';
-  }
-
-  @Get(':id')
-  findOne(@Req() req: Request): string {
-    return 'get film detail';
-  }
-
-  @Put(':id')
-  update(@Req() req: Request): string {
-    return 'update film';
-  }
-
-  @Delete(':id')
-  remove(@Req() req: Request): string {
-    return 'delete film';
+  async getAllFilms() {
+    return this.filmService.findAll();
   }
 }

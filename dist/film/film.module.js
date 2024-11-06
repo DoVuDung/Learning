@@ -9,12 +9,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilmModule = void 0;
 const common_1 = require("@nestjs/common");
 const film_controller_1 = require("./film.controller");
+const film_service_1 = require("./film.service");
 let FilmModule = class FilmModule {
 };
 exports.FilmModule = FilmModule;
 exports.FilmModule = FilmModule = __decorate([
     (0, common_1.Module)({
         controllers: [film_controller_1.FilmController],
+        providers: [film_service_1.FilmService],
     })
 ], FilmModule);
 //# sourceMappingURL=film.module.js.map
