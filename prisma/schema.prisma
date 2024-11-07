@@ -13,8 +13,9 @@ model Actor {
   last_name   String       @db.VarChar(45)
   last_update DateTime     @default(now()) @db.Timestamp(6)
   film_actor  Film_actor[]
-  @@map("actor")
+
   @@index([last_name], map: "idx_actor_last_name")
+  @@map("actor")
 }
 
 model Address {
@@ -30,8 +31,9 @@ model Address {
   customer    Customer[]
   staff       Staff[]
   store       Store[]
-  @@map("address")
+
   @@index([city_id], map: "idx_fk_city_id")
+  @@map("address")
 }
 
 model Category {
@@ -39,7 +41,8 @@ model Category {
   name          String          @db.VarChar(25)
   last_update   DateTime        @default(now()) @db.Timestamp(6)
   film_category Film_category[]
-	@@map("category")
+
+  @@map("category")
 }
 
 model City {
@@ -51,7 +54,7 @@ model City {
   country     Country   @relation(fields: [country_id], references: [country_id], onDelete: NoAction, onUpdate: NoAction, map: "fk_city")
 
   @@index([country_id], map: "idx_fk_country_id")
-	@@map("city")
+  @@map("city")
 }
 
 model Country {
@@ -59,7 +62,8 @@ model Country {
   country     String   @db.VarChar(50)
   last_update DateTime @default(now()) @db.Timestamp(6)
   city        City[]
-	@@map("country")
+
+  @@map("country")
 }
 
 model Customer {
@@ -80,55 +84,61 @@ model Customer {
   @@index([address_id], map: "idx_fk_address_id")
   @@index([store_id], map: "idx_fk_store_id")
   @@index([last_name], map: "idx_last_name")
-	@@map("customer")
+  @@map("customer")
 }
 
 model Film {
-  film_id          Int                     @id @default(autoincrement())
-  title            String                  @db.VarChar(255)
-  description      String?
-  release_year     Int?
-  language_id      Int                     @db.SmallInt
-  rental_duration  Int                     @default(3) @db.SmallInt
-  rental_rate      Decimal                 @default(4.99) @db.Decimal(4, 2)
-  length           Int?                    @db.SmallInt
-  replacement_cost Decimal                 @default(19.99) @db.Decimal(5, 2)
-  rating           MPAA_RATING?            @default(G)
-  last_update      DateTime                @default(now()) @db.Timestamp(6)
-  special_features String[]
-  fulltext         Unsupported("tsvector")
-  language         Language                @relation(fields: [language_id], references: [language_id])
-  film_actor       Film_actor[]
-  film_category    Film_category[]
-  inventory        Inventory[]
+  film_id          Int      @id @default(autoincrement())
+  title            String   @db.VarChar(255) @default("")
+  description      String?  @db.VarChar(255) @default("")
+  release_year     Int?     @db.Integer @default(0)
+  language_id      Int?      @db.SmallInt
+  rental_duration  Int      @default(3) @db.SmallInt
+  rental_rate      Decimal  @default(4.99) @db.Decimal(4, 2)
+  length           Int?     @db.SmallInt
+  replacement_cost Decimal  @default(19.99) @db.Decimal(5, 2)
+  last_update      DateTime @default(now()) @db.Timestamp(6)
+  special_features Json? @db.Json
 
-  @@index([fulltext], type: Gist)
+  // Relation
+  rating        MPAA_RATING?            @default(G)
+  // fulltext      Unsupported("tsvector")
+  language      Language?                @relation(fields: [language_id], references: [language_id])
+  film_actor    Film_actor[]
+  film_category Film_category[]
+  inventory     Inventory[]
+
+  // @@index([fulltext], type: Gist)
   @@index([language_id], map: "idx_fk_language_id")
   @@index([title], map: "idx_title")
-	@@map("film")
+  @@map("film")
 }
 
 model Film_actor {
   actor_id    Int      @db.SmallInt
   film_id     Int      @db.SmallInt
   last_update DateTime @default(now()) @db.Timestamp(6)
-  actor       Actor    @relation(fields: [actor_id], references: [actor_id])
-  film        Film     @relation(fields: [film_id], references: [film_id])
+
+  // Relation
+  actor Actor @relation(fields: [actor_id], references: [actor_id])
+  film  Film  @relation(fields: [film_id], references: [film_id])
 
   @@id([actor_id, film_id])
   @@index([film_id], map: "idx_fk_film_id")
-	@@map("film_actor")
+  @@map("film_actor")
 }
 
 model Film_category {
   film_id     Int      @db.SmallInt
   category_id Int      @db.SmallInt
   last_update DateTime @default(now()) @db.Timestamp(6)
+  
+  // Relation
   category    Category @relation(fields: [category_id], references: [category_id])
   film        Film     @relation(fields: [film_id], references: [film_id])
 
   @@id([film_id, category_id])
-	@@map("film_category")
+  @@map("film_category")
 }
 
 model Inventory {
@@ -136,19 +146,24 @@ model Inventory {
   film_id      Int      @db.SmallInt
   store_id     Int      @db.SmallInt
   last_update  DateTime @default(now()) @db.Timestamp(6)
+  
+  // Relation
   film         Film     @relation(fields: [film_id], references: [film_id])
   rental       Rental[]
 
   @@index([store_id, film_id], map: "idx_store_id_film_id")
-	@@map("inventory")
+  @@map("inventory")
 }
 
 model Language {
   language_id Int      @id @default(autoincrement())
   name        String   @db.Char(20)
   last_update DateTime @default(now()) @db.Timestamp(6)
+
+  // Relation
   film        Film[]
-	@@map("language")
+
+  @@map("language")
 }
 
 model Payment {
@@ -158,6 +173,8 @@ model Payment {
   rental_id    Int
   amount       Decimal  @db.Decimal(5, 2)
   payment_date DateTime @db.Timestamp(6)
+
+  // Relation
   customer     Customer @relation(fields: [customer_id], references: [customer_id])
   rental       Rental   @relation(fields: [rental_id], references: [rental_id], onDelete: SetDefault)
   staff        Staff    @relation(fields: [staff_id], references: [staff_id])
@@ -165,7 +182,7 @@ model Payment {
   @@index([customer_id], map: "idx_fk_customer_id")
   @@index([rental_id], map: "idx_fk_rental_id")
   @@index([staff_id], map: "idx_fk_staff_id")
-	@@map("payment")
+  @@map("payment")
 }
 
 model Rental {
@@ -176,6 +193,8 @@ model Rental {
   return_date  DateTime? @db.Timestamp(6)
   staff_id     Int       @db.SmallInt
   last_update  DateTime  @default(now()) @db.Timestamp(6)
+
+  // Relation
   payment      Payment[]
   customer     Customer  @relation(fields: [customer_id], references: [customer_id])
   inventory    Inventory @relation(fields: [inventory_id], references: [inventory_id])
@@ -183,7 +202,7 @@ model Rental {
 
   @@unique([rental_date, inventory_id, customer_id], map: "idx_unq_rental_rental_date_inventory_id_customer_id")
   @@index([inventory_id], map: "idx_fk_inventory_id")
-	@@map("rental")
+  @@map("rental")
 }
 
 model Staff {
@@ -198,11 +217,14 @@ model Staff {
   password    String?   @db.VarChar(40)
   last_update DateTime  @default(now()) @db.Timestamp(6)
   picture     Bytes?
+
+  // Relation
   payment     Payment[]
   rental      Rental[]
   address     Address   @relation(fields: [address_id], references: [address_id])
   store       Store?
-	@@map("staff")
+
+  @@map("staff")
 }
 
 model Store {
@@ -210,9 +232,12 @@ model Store {
   manager_staff_id Int      @unique(map: "idx_unq_manager_staff_id") @db.SmallInt
   address_id       Int      @db.SmallInt
   last_update      DateTime @default(now()) @db.Timestamp(6)
+
+  // Relation
   address          Address  @relation(fields: [address_id], references: [address_id])
   staff            Staff    @relation(fields: [manager_staff_id], references: [staff_id])
-	@@map("store")
+
+  @@map("store")
 }
 
 enum MPAA_RATING {
