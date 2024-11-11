@@ -65,7 +65,7 @@ export class ActorController {
   }
 
   @Delete(":id")
-  async deleteActorById(@Param("id") id: number) {
+  async deleteActorById(@Param("id", ParseIntPipe) id: number) {
     return this.actorService.deleteActor(id);
   }
 }
