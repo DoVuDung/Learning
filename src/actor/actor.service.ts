@@ -52,7 +52,7 @@ export class ActorService {
   }
 
   async deleteActor(actor_id: number) {
-    const actor = this.prisma.actor.findUnique({
+    const actor = await this.prisma.actor.findUnique({
       where: {
         actor_id,
       },

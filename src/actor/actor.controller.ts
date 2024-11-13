@@ -13,7 +13,6 @@ import {
 } from "@nestjs/common";
 import { ApiQuery, ApiTags } from "@nestjs/swagger";
 import { TransformInterceptor } from "src/interceptors/transform.interceptor";
-import { PrismaService } from "src/prisma-module/prisma.service";
 import { CreateActorDto, UpdateActorDto } from "./actor.dto";
 import { ActorService } from "./actor.service";
 
@@ -21,10 +20,7 @@ import { ActorService } from "./actor.service";
 @Controller("actor")
 @UseInterceptors(TransformInterceptor)
 export class ActorController {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly actorService: ActorService
-  ) {}
+  constructor(private readonly actorService: ActorService) {}
 
   @Post()
   async createActor(@Body() createActorDto: CreateActorDto) {
